@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="This is a simple chessbot implemented in Rust using the minimax algorithm with alpha-beta pruning for decision-making.">
+    <title>Chessbot - Minimax Algorithm</title>
+    <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon">
+
+    <link rel="stylesheet" href="./css/pico.min.css">
+    <link rel="stylesheet" href="./assets/chessboard.css">
+    <script type="module" src="./js/app.js"></script>
+</head>
+<body class="container">
+    <main>
+        <h1>Chessbot</h1>
+        <p>The minimax algorithm is a fundamental concept in artificial intelligence, particularly in games like chess. It works by recursively evaluating the possible moves of both players up to a certain depth in the game tree. At each level of the tree, the algorithm alternates between maximizing and minimizing the potential outcome, assuming the opponent will also choose the best move possible.</p>
+        <p>Alpha-beta pruning is an optimization technique used to reduce the number of nodes evaluated by the minimax algorithm. It works by maintaining two values, alpha and beta, which represent the minimum score the maximizing player is assured of and the maximum score the minimizing player is assured of, respectively. By eliminating branches of the game tree that are guaranteed to be worse than previously examined branches, alpha-beta pruning can significantly reduce the computational effort required to find the best move.</p>
+        <p>In the context of a chessbot implemented in Rust, the algorithm works by exploring the possible moves from the current board position, evaluating each one using a evaluation function that assesses the relative strength of the resulting board positions. The minimax algorithm with alpha-beta pruning allows the chessbot to make informed decisions about which move to make, considering both immediate gains and future consequences several (in this case 4) moves ahead.</p>
+        <h2>Demo:</h2>
+        <div style="max-height: 80vh; min-height: 360px; aspect-ratio:  1/1; margin: auto;">
+            <div id="board"></div>
+            <h3 id="info"></div>
+        </div>
+    </main>
+</body>
+</html>
