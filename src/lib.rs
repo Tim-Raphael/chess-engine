@@ -61,7 +61,7 @@ impl Chess {
     }
 
     pub fn make_engine_move(&mut self) {
-        let m = MiniMax::eval_best_move(&self.board, 4);
+        let m = MiniMax::eval_best_move(&self.board, 2);
 
         let mut result = self.board.clone();
         self.board.make_move(m, &mut result);
