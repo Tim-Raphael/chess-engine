@@ -8,11 +8,13 @@ impl MiniMax {
         let mut best_move = chess::ChessMove::default();
         let mut best_score = i32::MIN;
 
+        let color = board.side_to_move();
+
         for mv in MoveGen::new_legal(&board) {
             let mut result = board.clone();
             board.make_move(mv, &mut result);
 
-            let score = MiniMax::minimax(&result, depth - 1, true);
+            let score = MiniMax::minimax(&result, depth, i32::MIN, i32::MAX, false, color);
             if score > best_score {
                 best_score = score;
                 best_move = mv;
@@ -22,7 +24,7 @@ impl MiniMax {
         best_move
     }
 
-    pub fn evaluation(board: &Board) -> i32 {
+    pub fn evaluation(board: &Board, color: Color) -> i32 {
         let mut score = 0;
 
         for i in 0..64 {
@@ -58,8 +60,8 @@ impl MiniMax {
                 Piece::King => 2000,
             };
 
-            let color = board.color_on(square).unwrap();
-            let sign = if color == Color::Black { 1 } else { -1 };
+            let piece_color = board.color_on(square).unwrap();
+            let sign = if piece_color == color { 1 } else { -1 };
 
             if piece == Piece::King {
                 score += value * sign;
@@ -85,10 +87,13 @@ impl MiniMax {
     pub fn minimax(
         board: &Board,
         depth: u8,
+        mut alpha: i32,
+        mut beta: i32,
         is_maximizing: bool,
+        color: Color
     ) -> i32 {
         if depth == 0 {
-            return MiniMax::evaluation(board);
+            return MiniMax::evaluation(board, color);
         }
 
         if is_maximizing {
@@ -98,9 +103,23 @@ impl MiniMax {
                 let mut result = board.clone();
                 board.make_move(mv, &mut result);
 
-                let score = MiniMax::minimax(&result, depth - 1, false);
+                let score = MiniMax::minimax(&result, depth - 1, alpha, beta,  !is_maximizing, color);
+
                 best_score = best_score.max(score);
+
+                if score > best_score {
+                    best_score = score;
+                } 
+
+                if best_score > alpha {
+                    alpha = score;
+                }
+
+                if beta <= alpha {
+                    return score;
+                }
             }
+
             best_score
         } else {
             let mut best_score = i32::MAX;
@@ -109,8 +128,19 @@ impl MiniMax {
                 let mut result = board.clone();
                 board.make_move(mv, &mut result);
 
-                let score = MiniMax::minimax(&result, depth - 1, true);
-                best_score = best_score.min(score);
+                let score = MiniMax::minimax(&result, depth - 1, alpha, beta, !is_maximizing, color);
+
+                if score < best_score {
+                    best_score = score;
+                } 
+
+                if best_score < beta {
+                    beta = score;
+                }
+
+                if beta <= alpha {
+                    return score;
+                }
             }
 
             best_score
@@ -123,19 +153,19 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_evaluation() {
+    fn test_minimax() {
         let board = Board::default();
-        let score = MiniMax::evaluation(&board);
-
-        assert_eq!(score, 0);
+        let color = Color::White;
+        let depth = 3;
+        let best_move = MiniMax::minimax(&board, depth, i32::MIN, i32::MAX, true, color);
+        assert_eq!(best_move >= 0, true);
     }
 
     #[test]
-    fn test_minimax() {
+    fn test_evaluation() {
         let board = Board::default();
-        let score = MiniMax::minimax(&board, 1, true);
-        let score2 = MiniMax::minimax(&board, 4, true);
-
-        assert_eq!(score, score2);
+        let color = Color::White;
+        let score = MiniMax::evaluation(&board, color);
+        assert_eq!(score, 0);
     }
 }

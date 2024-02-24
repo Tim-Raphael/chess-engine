@@ -10,6 +10,7 @@ class App {
         this.lastValidMove;
         this.gameState = "Ongoing";
         this.info = document.getElementById("info");
+        this.engineTestRun = true;
 
         this.board.enableMoveInput(this.handleInput.bind(this));
     }
@@ -41,10 +42,16 @@ class App {
         }
 
         setTimeout(() => {
-            this.chess.make_engine_move();
+            this.gameState = this.chess.make_engine_move();
             
             setTimeout(() => { 
                 event.chessboard.setPosition(this.chess.to_fen(), true);
+
+                if (this.gameState !== "Ongoing") {
+                    this.handleGameOver();
+                    return false;
+                }
+
                 this.board.enableMoveInput(this.handleInput.bind(this));
                 this.info.innerText = "Your move";
             }, 10);

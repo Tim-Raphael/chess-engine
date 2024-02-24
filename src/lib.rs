@@ -60,12 +60,14 @@ impl Chess {
         return format!("{:?}", self.board.status());
     }
 
-    pub fn make_engine_move(&mut self) {
-        let m = MiniMax::eval_best_move(&self.board, 2);
+    pub fn make_engine_move(&mut self) -> String {
+        let m = MiniMax::eval_best_move(&self.board, 3);
 
         let mut result = self.board.clone();
         self.board.make_move(m, &mut result);
         self.board = result;
+
+        return format!("{:?}", self.board.status());
     }
 
     pub fn reset(&mut self) {
