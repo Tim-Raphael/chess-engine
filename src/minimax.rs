@@ -52,7 +52,7 @@ impl MiniMax {
 
             let piece = piece.unwrap();
             let value = match piece {
-                Piece::Pawn => 50,
+                Piece::Pawn => 100,
                 Piece::Bishop => 300,
                 Piece::Knight => 310, // knights are slightly more valuable in the center
                 Piece::Rook => 500,
@@ -97,7 +97,7 @@ impl MiniMax {
         }
 
         if is_maximizing {
-            let mut best_score = i32::MIN;
+            let mut best_score = -100_000_000;
 
             for mv in MoveGen::new_legal(&board) {
                 let mut result = board.clone();
@@ -122,7 +122,7 @@ impl MiniMax {
 
             best_score
         } else {
-            let mut best_score = i32::MAX;
+            let mut best_score = 100_000_000;
 
             for mv in MoveGen::new_legal(&board) {
                 let mut result = board.clone();

@@ -10,7 +10,6 @@ class App {
         this.lastValidMove;
         this.gameState = "Ongoing";
         this.info = document.getElementById("info");
-        this.engineTestRun = true;
 
         this.board.enableMoveInput(this.handleInput.bind(this));
     }

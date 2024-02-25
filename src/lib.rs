@@ -5,7 +5,6 @@ use minimax::MiniMax;
 use std::str::FromStr;
 use wasm_bindgen::prelude::*;
 
-// interface
 #[wasm_bindgen]
 pub struct Chess {
     board: Board,
